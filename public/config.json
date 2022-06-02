@@ -1,0 +1,4 @@
+{
+    "BASE_URL_DEV": "http://planapi.shoumi310.com",
+        "BASE_URL_PROD": "http://planapi.shoumi310.com"
+}
