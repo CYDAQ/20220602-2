@@ -41,7 +41,6 @@
                         </svg>
                     </td>
                 </tr>
-               
             </tbody>
         </table>
         <div>
@@ -67,7 +66,12 @@
 
             ]
             const Quit = () => {
-
+                localStorage.removeItem("User_Token");
+                router.push({
+                    path: '/login',
+                    query: {
+                    },
+                });
             }
             return {
                 title,

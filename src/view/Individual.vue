@@ -166,7 +166,6 @@
                 new Promise((resolve) => {
                     return resolve(Visit.value.onget(eve))
                 }).then((res) => {
-                    console.log(res);
                     switch (res.data.code) {
                         case 0:
                             data.value = res.data

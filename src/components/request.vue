@@ -4,8 +4,8 @@
     export default defineComponent({
         setup() {
             const axios = require('axios');
-            axios.defaults.baseURL = 'http://192.168.2.7:8093';//测试环境
-            // axios.defaults.baseURL = 'http://planapi.shoumi310.com';//正式环境
+            // axios.defaults.baseURL = 'http://192.168.2.7:8093';//测试环境
+            axios.defaults.baseURL = 'http://planapi.shoumi310.com';//正式环境
             const token = localStorage.getItem("User_Token")
             const onput = (data) => {
                 return new Promise((resolve) => {

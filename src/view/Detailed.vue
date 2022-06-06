@@ -38,22 +38,25 @@
                                         <div>参考赔率:{{item.odd}}</div>
                                     </div>
                                     <div class="span">
-                                        <div style="color:#000;margin-bottom: auto;" class="planRadius sm">
+                                        <div style="margin-bottom: auto;" class="planRadius sm">
                                             {{index+1}}-3
                                         </div>
                                         <div class="span" style=" align-items: flex-end" v-if="item.status=='进行中'">
                                             <h3 class="size planRadius">
                                                 <!-- <span class="badge bg-dark"></span> -->
-                                                <div class="status">
+                                                <div v-if="item.awayScore>=0">{{item.awayScore}}:{{item.homeScore}}</div>
+                                                <div class="">
                                                     {{item.status}}
                                                 </div>
-                                                <div class="flex-row align button-ms" @click="Jump('/PlanAdd',item)">
-                                                    <div >添加笔记</div>
+                                                <div class="flex-row align button-ms status"
+                                                    @click="Jump('/PlanAdd',item)" v-if="win">
+                                                    <div>添加笔记</div>
                                                 </div>
                                             </h3>
                                         </div>
                                         <div v-else>
                                             <h3 class="size planRadius">
+                                                <div v-if="item.awayScore>=0">{{item.awayScore}}:{{item.homeScore}}</div>
                                                 {{item.status}}
                                             </h3>
                                         </div>
@@ -77,7 +80,8 @@
                                     <div style=" width: 100%;" class="flex-row flex-1">
                                         <div class="col-7">
                                             <h3 style="margin: 0;">{{item.home}}vs{{item.away}}</h3>
-                                            <p style="margin: 0; font-size: 0.9rem; color: rgb(139, 139, 139);">{{item.game}} /
+                                            <p style="margin: 0; font-size: 0.9rem; color: rgb(139, 139, 139);">
+                                                {{item.game}} /
                                                 {{item.time}}</p>
                                             <!-- <div>编号:{{item.matchId}}</div> -->
                                             <table>
@@ -107,18 +111,9 @@
                                         <div class="flex-column span">
                                             <div class="sm ma-bot" style="float: right; color: #000">
                                                 推荐:{{item.option}}
-                                                <!-- <h5 style="margin:auto 0 0;" class="ma-bot">
-                                                    <span class="badge-Label Grey-Label"
-                                                        v-if="item.status=='未中奖'">未中奖</span>
-                                                    <span class="badge-Label Green-Label"
-                                                        v-if="item.status=='进行中'">进行中</span>
-                                                    <span class="badge-Label blue-Label"
-                                                        v-if="item.status=='未开奖'">未开奖</span>
-                                                    <span class="badge-Label orange-Label"
-                                                        v-if="item.status=='已中奖'">已中奖</span>
-                                                </h5> -->
                                             </div>
-                                            <div class="flex-row align button-ms" @click="put('/PlanAdd',item)"  v-if="item.status=='进行中'">
+                                            <div class="flex-row align button-ms" @click="put('/PlanAdd',item)"
+                                                v-if="item.status=='进行中'">
                                                 <div>修改笔记</div>
                                             </div>
                                         </div>
@@ -166,7 +161,8 @@
                     url: '/project/' + route + '/follow',
                     data: {}
                 },
-                preprocessor: false
+                preprocessor: false,
+                win: true
             })
             const Prompt = (eve) => {
                 Popover.value = true
@@ -180,18 +176,12 @@
                 for (let index in eve) {
                     let defaultPrize = eve[index].defaultPrize.toFixed(2)
                     eve[index].defaultPrize = parseFloat(defaultPrize);
-                    // let now = new Date(eve[index].time),
-                    //     y = now.getFullYear(),
-                    //     m = now.getMonth() + 1,
-                    //     d = now.getDate();
-                    // eve[index].time = y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d)
                 }
             }
             const Prepare = (eve) => {
                 new Promise((resolve) => {
                     return resolve(Visit.value.onget(eve))
                 }).then((res) => {
-                    console.log(res);
                     if (res.data.code) {
                         login('/login')
                         Prompt(res.data.data)
@@ -202,7 +192,7 @@
                     preprocessor()
                 }).catch((err) => {
                     console.log(err);
-                    // Prompt('登录状态过期')
+                    Prompt(err)
                 })
             }
             const preprocessor = () => {
@@ -212,6 +202,9 @@
                     }
                     if (state.plan_data.list[index].status == '进行中') {
                         state.preprocessor = true
+                    }
+                    if (state.plan_data.list[index].status == '中奖') {
+                        state.win = false
                     }
                 }
             }
@@ -329,7 +322,6 @@
     }
 
     .sm {
-        color: rgb(247, 247, 247);
         font-size: 10px;
     }
 
@@ -350,14 +342,12 @@
         flex-grow: 1;
     }
 
-    .col-7 {}
-
     .col-7 div {
         margin: 1px 0;
         color: #9e9e9e;
     }
 
-    .Select div{
+    .Select div {
         color: #272727;
 
     }
@@ -538,7 +528,8 @@
     .plan_data {
         color: rgb(157, 157, 157);
     }
-    .status{
-        margin-bottom: 10px;
+
+    .status {
+        margin-top: 3px;
     }
 </style>

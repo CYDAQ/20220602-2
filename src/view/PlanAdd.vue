@@ -128,7 +128,6 @@
             data.value.data.pan = adddata.value.noteOdd
             data.value.data.odd = adddata.value.notePan
             data.value.data.amount = adddata.value.notePrize
-            console.log(data);
             const slider = () => {
                 for (let i in data_arr) {
                     let Temporary = data.value.data[data_arr[i]]

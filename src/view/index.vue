@@ -26,7 +26,7 @@
                             <img v-bind:src="color[key].Authentication" alt="" srcset="" class="Authentication">
                         </div>
                         <div class="flex-1 text txt_m">{{item.modelName}}</div>
-                        <div class="flex-reverse flex-1 sm txt_m">{{item.followCount}}订阅</div>
+                        <div class="flex-reverse flex-1 sm txt_m">{{item.followCount}}收藏</div>
                     </div>
                     <div class="flex-row">
                         <div class="flex-1 flex-end text">

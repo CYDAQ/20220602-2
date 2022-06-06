@@ -69,7 +69,6 @@
                                         p-id="5193" fill="#8a8a8a"></path>
                                 </svg>
                             </td>
-
                         </tr>
                         <tr class="Lose" v-else-if="item.status=='未中奖'">
                             <th scope="row"> {{item.projectId}}</th>
@@ -124,39 +123,6 @@
 
         </div>
     </div>
-    <!-- <div>
-        <div class="container">
-            <div class="title h5">
-                <h3>
-                    大神观点
-                </h3>
-            </div>
-            <template v-for="(item, index) in Viewpoint" :key="index">
-                <div class="card Comment" @click="introductionClick(index)">
-                    <div class="jumbotron jumbotron-fluid">
-                        <div class=" card_m">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="img float">
-                                    </div>
-                                    <div class="float">
-                                        {{item.username}}
-                                    </div>
-                                </div>
-                                <div class="col sm flex-reverse">
-                                    {{item.time}}
-                                </div>
-                            </div>
-                            <div class="clear">{{item.introduction}}</div>
-                            <div v-if="item.condition">
-                                {{item.Comment}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </template>
-        </div>
-    </div> -->
     <div class="after">
 
     </div>
@@ -207,10 +173,7 @@
                 new Promise((resolve) => {
                     return resolve(Visit.value.onget(eve))
                 }).then((res) => {
-                    console.log(res);
-
                     if (res.data.code) {
-                        console.log(res.data.data);
                         text.value = res.data.data
                         Popover.value = true
                         setTimeout(function () {
@@ -456,5 +419,8 @@
         border-radius: 15px;
         z-index: 9999;
         box-shadow: 1px 1px 10px rgba(190, 190, 190, 0.4);
+    }
+    .plan_data {
+        color: rgb(157, 157, 157);
     }
 </style>

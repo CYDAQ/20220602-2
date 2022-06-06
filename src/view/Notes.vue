@@ -83,8 +83,6 @@
                 pageSize: 10,
                 statusVal: ''
             }
-
-
             const notes_data = ref([])
             const loading_Scroll = ref(false);
             const Prepare = () => {
@@ -144,7 +142,6 @@
                 let Bool = scroll.value.onScroll()
                 if (Bool && !loading_Scroll.value) {
                     Query.page += 1
-                    console.log('ok');
                     Prepare()
                 }
             }

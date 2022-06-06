@@ -1,26 +1,25 @@
 <template>
     <pageNavs :title="title"></pageNavs>
     <div>
-        <div class="header_text flex-row content">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-                <path
-                    d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-            </svg>
-            <div>
-                此为追号计划，中奖请停止后续投入
+        <div class="Serialnumber flex-row content">
+            <div class="col-7 flex align content">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                </svg>
+                <div class="flex">
+                    此为追号计划，中奖请停止后续投入
+                </div>
             </div>
-        </div>
-        <div class="Serialnumber flex-row">
-            <div class="col-7 flex-1">当前预计收益: <a href="#" class="color"> {{plan_data.profitPer}}%</a> </div>
         </div>
         <div>
             <div class=" ">
                 <div class="card plancard">
                     <div class="jumbotron jumbotron-fluid">
                         <div class=" card_m flex-column">
-                            <template v-for="item in plan_data.list" :key="item.id">
-                                <div class="flex-row row" :style="tablecolor(item.status)">
+                            <template v-for="item,index in plan_data.list" :key="item.id">
+                                <!-- <div class="flex-row row" :style="tablecolor(item.status)">
                                     <div class="col-2 ">
                                         <h4 class="planRadius">{{item.matchId}}</h4>
                                     </div>
@@ -36,6 +35,38 @@
                                             <span class="badge bg-dark">{{item.status}}</span>
                                         </h5>
                                     </div>
+                                </div> -->
+                                <div class="flex-row row plan_data" :style="tablecolor(item.status)">
+                                    <div class="col-7" :class="item.status=='进行中' ? 'Select' : ''">
+                                        <h3 style="margin: 0;">{{item.home}}vs{{item.away}}</h3>
+                                        <div>赛事:{{item.game}}</div>
+                                        <div>时间:{{item.time}}</div>
+                                        <div> 盘口:{{item.pan}}</div>
+                                        <div>推荐:{{item.option}}</div>
+                                        <div>参考赔率:{{item.odd}}</div>
+                                    </div>
+                                    <div class="span">
+                                        <div style="color:#000;margin-bottom: auto;" class="planRadius sm">
+                                            {{index+1}}-3
+                                        </div>
+                                        <div class="span" style=" align-items: flex-end" v-if="item.status=='进行中'">
+                                            <h3 class="size planRadius">
+                                                <!-- <span class="badge bg-dark"></span> -->
+                                                <div v-if="item.awayScore>=0">{{item.awayScore}}:{{item.homeScore}}
+                                                </div>
+                                                <div class="">
+                                                    {{item.status}}
+                                                </div>
+                                            </h3>
+                                        </div>
+                                        <div v-else>
+                                            <h3 class="size planRadius">
+                                                <div v-if="item.awayScore>=0">{{item.awayScore}}:{{item.homeScore}}
+                                                </div>
+                                                {{item.status}}
+                                            </h3>
+                                        </div>
+                                    </div>
                                 </div>
                             </template>
                         </div>
@@ -44,7 +75,6 @@
             </div>
         </div>
         <div class="Collection">
-
             <div class="container grey">
                 <div>温馨提示:</div>
                 <div>
@@ -101,8 +131,22 @@
                     data: {}
                 },
                 isFollow: false,
-                Failure: false
+                Failure: false,
+                preprocessor:false,
             })
+            const preprocessor = () => {
+                for (let index = 0; index < state.plan_data.list.length; index++) {
+                    if (state.preprocessor) {
+                        state.plan_data.list[index].status = '未开始'
+                    }
+                    if (state.plan_data.list[index].status == '进行中') {
+                        state.preprocessor = true
+                    }
+                    if (state.plan_data.list[index].status == '中奖') {
+                        state.win = false
+                    }
+                }
+            }
             const Prepare = (eve) => {
                 new Promise((resolve) => {
                     return resolve(Visit.value.onget(eve))
@@ -115,13 +159,15 @@
                         }
                     Failure(res.data.list[0])
                     state.plan_data = res.data
+                    preprocessor()
+                    console.log(state.plan_data);
                 }).catch((err) => {
                     console.log(err);
                 })
             }
             const Failure = (eve) => {
                 let time = eve.time
-                if (Date.parse(new Date()) > Date.parse(new Date(time))) {
+                if (Date.parse(new Date()) > Date.parse(new Date(time.replace(/-/g, "/")))) {
                     state.Failure = true
                 }
             }
@@ -225,7 +271,6 @@
     .col-7,
     .col-3 {
         flex-grow: 1;
-        margin: 3px;
     }
 
     .header_text {
@@ -236,11 +281,9 @@
         text-align: center;
         font-size: 0.7rem;
         padding: 8px;
-        text-align: center;
     }
 
     .row {
-        align-items: center;
         border-radius: 10px;
         padding: 10px;
         margin: 5px;
@@ -281,6 +324,24 @@
     .after {
         content: '';
         height: 64px;
-        display: block;
+        display: flex;
+    }
+
+    .span {
+        display: grid;
+        align-items: flex-end
+    }
+
+    .status {
+        margin-bottom: 10px;
+    }
+
+    .planRadius {
+        text-align: end;
+    }
+
+    .size {
+        margin: 0;
+        font-size: 1rem;
     }
 </style>

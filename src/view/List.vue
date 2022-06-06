@@ -111,11 +111,11 @@
                 title: '计划列表',
                 list_data: [],
                 text: '',
-            
+
             })
             const Prepare = () => {
                 const Parameters = {
-                    url: '/project/football/'+argument+'?page=' + Query.page + '&pageSize=' + Query.pageSize,
+                    url: '/project/football/' + argument + '?page=' + Query.page + '&pageSize=' + Query.pageSize,
                     date: {
                     }
                 }
@@ -143,7 +143,7 @@
                         }
                         if (Math.ceil(res.data.total / 10) >= Query.page) {
                             state.list_data = state.list_data.concat(res.data.rows)
-                        }else{
+                        } else {
                             Stop.value = true
                             loading_Scroll.value = false
                         }
@@ -153,10 +153,9 @@
                     console.log(err);
                 })
             }
-            const Jump = (path,id) => {
-                console.log(id);
+            const Jump = (path, id) => {
                 router.push({
-                    path: path+id,
+                    path: path + id,
                     query: {
                         id: id,
                         route: argument
@@ -167,7 +166,6 @@
                 let Bool = scroll.value.onScroll()
                 if (Bool && !loading_Scroll.value) {
                     Query.page += 1
-                    console.log('ok');
                     Prepare()
                 }
             }
@@ -180,13 +178,15 @@
                 Popover,
                 text,
                 containersnum,
-                container
+                container,
             }
         },
         mounted() {
             this.$nextTick(function () {
                 this.Prepare()
                 this.containersnum = window.innerHeight - 128 - this.$refs.container.offsetHeight;
+
+
             })
         },
     })

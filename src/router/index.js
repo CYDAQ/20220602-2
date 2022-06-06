@@ -96,8 +96,6 @@ router.beforeEach((to, from, next) => {
         if (item.indexOf(to.path) !== -1) {
             next()
             return
-        } else {
-            console.log(to.path);
         }
     });
     let token = localStorage.getItem('User_Token')

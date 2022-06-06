@@ -70,8 +70,6 @@
                 if (newpassword2.value == '' || data.data.old == '' || data.data.password == '') {
                     setTime("密码不能为空", true)
                     return
-                } else {
-                    console.log('ok');
                 }
                 if (newpassword2.value.indexOf(data.data.password) == -1) {
                     setTime("两次输入不一致", true)

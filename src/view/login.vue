@@ -52,7 +52,7 @@
             const Visiable=ref('')
             const Popover = ref(false)
             const Warning = ref('')
-            const exampleCheck = ref(false)
+            const exampleCheck = ref(true)
             const login = ref(null);
             const router = useRouter();
             const handleClick = () => {
